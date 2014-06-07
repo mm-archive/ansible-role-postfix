@@ -1,0 +1,4 @@
+---
+#file: postfix/defaults/main.yml
+
+postfix_root_email_destination: root

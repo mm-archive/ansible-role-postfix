@@ -1,0 +1,8 @@
+---
+# file: roles/postfix/handlers/main.yml
+
+- name: Restart Postfix
+  service: name=postfix state=restarted enabled=yes
+
+- name: Newaliases
+  command: newaliases

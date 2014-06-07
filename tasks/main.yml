@@ -1,0 +1,36 @@
+---
+# file: roles/postfix/tasks/main.yml
+
+- name: Set mailname
+  shell: echo postfix postfix/mailname string $HOSTNAME | debconf-set-selections
+  register: postfix_set_mailname
+  changed_when: postfix_set_mailname.stdout != ""
+
+- name: Set mailer_type
+  shell: echo postfix postfix/main_mailer_type string 'Internet Site' | debconf-set-selections
+  register: postfix_set_mailer_type
+  changed_when: postfix_set_mailer_type.stdout != ""
+
+- name: Install Packages
+  apt: >
+    pkg={{ item }}
+    state=latest
+  with_items:
+    - postfix
+    - mailutils
+  notify: Restart Postfix
+
+- name: Forward Email for Root
+  lineinfile: >
+    dest=/etc/aliases
+    regexp='^root:'
+    line='root: {{ postfix_root_email_destination }}'
+  when: postfix_root_email_destination != "root"
+  notify: Newaliases
+
+- name: Remove forwarding if mail should be delivered to local root
+  lineinfile: >
+    dest=/etc/aliases
+    regexp='^root:'
+  when: postfix_root_email_destination == "root"
+  notify: Newaliases
