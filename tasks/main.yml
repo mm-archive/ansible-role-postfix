@@ -32,5 +32,6 @@
   lineinfile: >
     dest=/etc/aliases
     regexp='^root:'
+    state='absent'
   when: postfix_root_email_destination == "root"
   notify: Newaliases
