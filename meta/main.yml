@@ -2,3 +2,16 @@
 # file: postfix/meta/main.yml
 
 version: 1.0.1
+
+galaxy_info:
+  author: Matthew Miller
+  description: A base postfix config
+  company:
+  license: license (MIT)
+  min_ansible_version: 1.6
+  platforms:
+    - name: Ubuntu
+      versions:
+        - trusty
+  categories:
+    - system
